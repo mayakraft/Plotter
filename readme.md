@@ -6,4 +6,4 @@ make generative art directly into SVG
 
 # example random walker
 
-![example](https://raw.githubusercontent.com/robbykraft/SVG/master/images/random_walker.svg)
+![example](https://cdn.rawgit.com/robbykraft/SVG/master/images/random_walker.svg)
