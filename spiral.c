@@ -39,18 +39,19 @@ int main(int argc, char **argv){
 	fprintf(file, "<g>\n");
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
 	float x, y;
+	const int REVS = 20;
 	unsigned char newPolyline = 0;
-	for(int i = 3; i < 100; i++){
+	for(int i = 1; i < REVS; i++){
 		float divider = i * 30;
 		for(float a = 0; a < TWOPI; a += TWOPI/divider){
-			float bend1 = noise1(seed + a*3)*(i-3)*.7;
-			float bend2 = noise1(seed + 8+a*10) * powf(i-40,2)*.05;
-			if(i < 40) bend2 = 0;
-			float bend3 = noise1(-seed - a*40) * (i-80)*0.8;
-			if(i < 80) bend3 = 0;
-			x = width*.5  + cos(a) * (i + a/TWOPI + bend1) * 3 + cos(a) * bend2 - sin(a) * bend3;
-			y = height*.5 + sin(a) * (i + a/TWOPI + bend1) * 3 + sin(a) * bend2 - cos(a) * bend3;
-			fprintf(file, "%.2f,%.2f ", x, y);
+			float bend1 = noise1(seed + a*3)*(i-1)*.7;
+			float bend2 = noise1(seed + 8+a*10) * powf(i-(REVS*.4),2)*.8;
+			if(i < (REVS*.4)) bend2 = 0;
+			float bend3 = noise1(-seed - a*10) * (i-(REVS*.6))*5;
+			if(i < (REVS*.6)) bend3 = 0;
+			x = width*.5  + cos(a) * (i + a/TWOPI + bend1) * 15 + cos(a) * bend2 - sin(a+i*.1) * bend3;
+			y = height*.5 + sin(a) * (i + a/TWOPI + bend1) * 15 + sin(a) * bend2 - cos(a+i*.1) * bend3;
+			fprintf(file, "%.1f,%.1f ", x, y);
 		}
 	}
 	fprintf(file, "\"/>\n"); // closing quote

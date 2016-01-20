@@ -9,7 +9,7 @@ int main(int argc, char **argv){
 
 
 	int width = 640;
-	int height = 320;
+	int height = 640;
 
 	char path[128];
 	path[0] = '\0';
@@ -40,8 +40,8 @@ int main(int argc, char **argv){
 	unsigned char newPolyline = 0;
 	for(int i = 0; i < 20000; i++){
 		fprintf(file, "%.2f,%.2f ", x, y);
-		x += (rand()%100 / 100.0 - .5)*10;
-		y += (rand()%100 / 100.0 - .5)*10;
+		x += (rand()%100 / 100.0 - .45)*10;
+		y += (rand()%100 / 100.0 - .45)*10;
 		if(x < 0){   x += width; newPolyline = 1; }
 		if(y < 0){   y += height; newPolyline = 1; }
 		if(x > width){ x -= width; newPolyline = 1; }
