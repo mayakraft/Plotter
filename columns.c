@@ -49,7 +49,7 @@ int main(int argc, char **argv){
 
 	float x, y;
 
-	float COLUMNS = 24;
+	float COLUMNS = 12;
 
 	for(int i = 0; i < COLUMNS; i++){
 		for(float j = 0; j < height; j++){
@@ -63,7 +63,7 @@ int main(int argc, char **argv){
 			float waveMag = 15;
 			float xShift = 50 * noise2(vec);
 
-			x = 40 + 30*i + 20*one + 20*three + waveMag*sinf(j*.05) * posNeg(halfI%2) + xShift;
+			x = 40 + 30*i + 40*one + 40*three + waveMag*sinf(j*.02) * posNeg(halfI%2) + xShift;
 			y = j;
 
 			fprintf(file, "%.2f,%.2f ", x, y);
