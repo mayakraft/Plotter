@@ -21,13 +21,13 @@ int main(int argc, char **argv){
 	float seed = rand()%1000/100.0;
 
 	int width = 1200;
-	int height = 680;
+	int height = 800;
 
 	char path[128];
 	path[0] = '\0';
 	// strcat(path, directory);
 	// strcat(path, filename);
-	strcat(path, "h homemade.svg");
+	strcat(path, "homemade.svg");
 	FILE *file = fopen(path, "w");
 	fprintf(file, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
 	fprintf(file, "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ");
@@ -48,7 +48,7 @@ int main(int argc, char **argv){
 
 	float x, y;
 
-	float COLUMNS = 20;
+	float COLUMNS = 24;
 
 	for(int i = 0; i < COLUMNS; i++){
 		fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
@@ -61,10 +61,9 @@ int main(int argc, char **argv){
 			// vec[0] = i*.33;
 			// vec[1] = j/(float)height*3;
 			float waveMag = 18;
-			float xShift = 30 * sinf(j*.1);
-			// float xShift = 30 * sinf(j*.01+i*.5);
+			float xShift = 0;//30 * sinf(i);
 
-			x = 70 + 30*(i+one+three)+waveMag*sinf(j*.05) * posNeg(halfI%2) + xShift;
+			x = 70 + 30*(i+one+three)+waveMag*sinf(j*.05) * posNeg(halfI%2);
 			y = j;
 
 			fprintf(file, "%.2f,%.2f ", x, y);
