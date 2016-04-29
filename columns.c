@@ -61,7 +61,7 @@ int main(int argc, char **argv){
 			// vec[0] = i*.33;
 			// vec[1] = j/(float)height*3;
 			float waveMag = 18;
-			float xShift = 30 * sinf(j*.1);
+			float xShift = 30 * sinf(j*.111111);
 			// float xShift = 30 * sinf(j*.01+i*.5);
 
 			x = 70 + 30*(i+one+three)+waveMag*sinf(j*.05) * posNeg(halfI%2) + xShift;
