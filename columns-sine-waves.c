@@ -7,13 +7,20 @@
 
 #define TWOPI 6.28318530718
 
+int posNeg(int in){
+	if(in == 0){
+		return -1;
+	}
+	return 1;
+}
+
 int main(int argc, char **argv){
 	time_t t;
 	srand((unsigned) time(&t));
 
 	float seed = rand()%1000/100.0;
 
-	int width = 800;
+	int width = 1200;
 	int height = 800;
 
 	char path[128];
@@ -39,29 +46,38 @@ int main(int argc, char **argv){
 	fprintf(file, "<g>\n");
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
 
-	float x, y;
-	float SCALE = 55;
-	float ENDCAP = .4;
-	float ROUNDS = 6;//15.0;//18.0;
-	
-	float divider = 5 * 60;
 
-	for(int i = 0; i < ROUNDS; i+=2){
-		for(float a = 0; a <= TWOPI; a += TWOPI/divider){
-			x = width*.5  + SCALE * cos(a) * (i + 2*a/TWOPI);
-			y = height*.5 + SCALE * sin(a) * (i + 2*a/TWOPI);
+	float x, y;
+
+	float COLUMNS = 20;
+
+	for(int i = 0; i < COLUMNS; i++){
+		for(float j = 0; j < height; j+=2){
+			int halfI = floor(i*.5);
+			int one = floor((i+0)*.25);
+			int three = floor((i+2)*.25);
+
+			x = 40 + 30*i + 20*one + 20*three + 15*sinf(j*.1) * posNeg(halfI%2);
+			y = j;
+
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
+		fprintf(file, "\"/>\n"); // closing quote
+		fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote	
 	}
-	fprintf(file, "\"/>\n"); // closing quote
-	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
-	for(int i = 0; i < ROUNDS; i+=2){
-		for(float a = 0; a <= TWOPI; a += TWOPI/divider){
-			x = width*.5  + SCALE * cos(a-TWOPI*.5) * (i + 2*a/TWOPI);
-			y = height*.5 + SCALE * sin(a-TWOPI*.5) * (i + 2*a/TWOPI);
-			fprintf(file, "%.2f,%.2f ", x, y);
-		}
-	}
+	// fprintf(file, "\"/>\n"); // closing quote
+	// fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
+
+	// float turn = 0;
+	// for(int i = 0; i < COLUMNS; i+=2){
+	// 	for(float j = 0; j < TWOPI; j += TWOPI/divider){
+	// 		x = 0;
+	// 		y = 0;
+	// 		fprintf(file, "%.2f,%.2f ", x, y);
+	// 	}
+	// }
+
+
 	fprintf(file, "\"/>\n"); // closing quote
 
 	fprintf(file, "</g>\n");

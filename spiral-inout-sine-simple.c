@@ -50,7 +50,7 @@ int main(int argc, char **argv){
 	float wobbleMag = 0.1;
 
 	for(int i = 0; i < ROUNDS; i+=2){
-		for(float a = 0; a < TWOPI; a += TWOPI/divider){
+		for(float a = 0; a <= TWOPI; a += TWOPI/divider){
 			x = width*.5  + SCALE * cos(a) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*(i + 2*a/TWOPI) );
 			y = height*.5 + SCALE * sin(a) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*(i + 2*a/TWOPI) );
 			fprintf(file, "%.2f,%.2f ", x, y);
@@ -59,7 +59,7 @@ int main(int argc, char **argv){
 	fprintf(file, "\"/>\n"); // closing quote
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
 	for(int i = 0; i < ROUNDS; i+=2){
-		for(float a = 0; a < TWOPI; a += TWOPI/divider){
+		for(float a = 0; a <= TWOPI; a += TWOPI/divider){
 			x = width*.5  + SCALE * cos(a-TWOPI*.5) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*(i + 2*a/TWOPI) );
 			y = height*.5 + SCALE * sin(a-TWOPI*.5) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*(i + 2*a/TWOPI) );
 			fprintf(file, "%.2f,%.2f ", x, y);

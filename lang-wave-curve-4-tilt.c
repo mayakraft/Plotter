@@ -47,7 +47,7 @@ int main(int argc, char **argv){
 	float divider = 5 * 60;
 
 	float wobbleFreq = 23.0;
-	float wobbleMag = 0.02;
+	float wobbleMag = 0.033;
 
 	float nudgeScale = 0.0333;
 
@@ -67,16 +67,19 @@ int main(int argc, char **argv){
 				nudgeScale = 0.06;
 			else
 				nudgeScale = 0.033;
-			float wobbleIncr = (i + 2*a/TWOPI);
 
+			if(i == 0)
+				wobbleMag = 0.03 + (0.04-0.03) * (1-a/TWOPI);
+			else if(i == 2)
+				wobbleMag = 0.02 + (0.03-0.02) * (1-a/TWOPI);
+			else 
+				wobbleMag = 0.02;
+
+			float wobbleIncr = (i + 2*a/TWOPI);
 			// if(cos(a) < 0)
 			// 	wobbleIncr *= 1.5;
 			wobbleIncr = (i + 2*a/TWOPI) * (1 + (-1*cos(a) + 1)*.25);
 
-// here's where i left off
-			wobbleMag = 0.02;//  + .02 * sin(a*wobbleFreq * .25 );
-
-			// wobbleIncr = 1.0;
 			x = width*.5  + SCALE * cos(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE*.33 * one;
 			y = height*.5 + SCALE * sin(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
@@ -103,13 +106,21 @@ int main(int argc, char **argv){
 				nudgeScale = 0.06;
 			else
 				nudgeScale = 0.033;
-			float wobbleIncr = (i + 2*a/TWOPI);
 
+
+			if(i == 0)
+				wobbleMag = 0.03 + (0.04-0.03) * (1-a/TWOPI);
+			else if(i == 2)
+				wobbleMag = 0.02 + (0.03-0.02) * (1-a/TWOPI);
+			else 
+				wobbleMag = 0.02;
+
+
+			float wobbleIncr = (i + 2*a/TWOPI);
 			// if(cos(a) < 0)
 			// 	wobbleIncr *= 1.5;
 			wobbleIncr = (i + 2*a/TWOPI) * (1 + (-1*cos(a) + 1)*.25);
 
-			// wobbleIncr = 1.0;
 			x = width*.5  + SCALE * cos(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE*.33 * one;
 			y = height*.5 + SCALE * sin(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
