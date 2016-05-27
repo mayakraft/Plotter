@@ -38,8 +38,8 @@ int main(int argc, char **argv){
 	for(int i = 0; i < 10; i++){
 		x = rand()%width;
 		y = rand()%height;
-		int SIZE = 2 + rand()%4;
-		float RADIUS = .4;
+		int SIZE = 20 + rand()%100;
+		float RADIUS = .3;
 		float phase = rand()%628 / 100.0;
 		for(float a = 0; a < phase + SIZE * TWOPI; a += .01){
 			float rx = x + (cos(a) * a) * RADIUS;
