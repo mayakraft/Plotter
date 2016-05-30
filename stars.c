@@ -35,13 +35,13 @@ int main(int argc, char **argv){
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
 
 	float x, y;
-	for(int i = 0; i < 10; i++){
+	for(int i = 0; i < 3; i++){
 		x = rand()%width;
 		y = rand()%height;
-		int SIZE = 20 + rand()%100;
-		float RADIUS = .3;
+		int SIZE = 120 + rand()%150;
+		float RADIUS = .4;
 		float phase = rand()%628 / 100.0;
-		for(float a = 0; a < phase + SIZE * TWOPI; a += .01){
+		for(float a = 0; a < phase + SIZE * TWOPI; a += .05){
 			float rx = x + (cos(a) * a) * RADIUS;
 			float ry = y + (sin(a) * a) * RADIUS;
 			fprintf(file, "%.2f,%.2f ", rx, ry);
