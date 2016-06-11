@@ -40,7 +40,7 @@ float magnitude4 = 15;
 float period1 = 0.02;
 float period2 = 0.005;
 float period3 = 0.015;
-float period4 = 0.0896;
+float period4 = 0.0175;
 
 
 int main(int argc, char **argv){
@@ -96,7 +96,7 @@ int main(int argc, char **argv){
             // wave1 = 0;
             // wave2 = 0;
             // wave3 = 0;
-            wave4 = 0;
+            // wave4 = 0;
             
             x = 70 + magnitude0*(i+one+three)
                       + magnitude1*wave1
