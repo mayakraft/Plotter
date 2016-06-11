@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-
-#include "noise.c"
+#include <math.h>
 
 #define TWOPI 6.28318530718
 
