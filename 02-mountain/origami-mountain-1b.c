@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
-#include "noise.c"
+#include "../common/noise.c"
 
 #define TWOPI 6.28318530718
 
@@ -39,26 +40,22 @@ int main(int argc, char **argv){
 	fprintf(file, "<g>\n");
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
 	float x, y;
-	float SCALE = 60;
+	float SCALE = 100;
 	unsigned char newPolyline = 0;
-	for(int i = 1; i < 6; i++){
+	for(int i = 1; i < 4; i++){
 		float divider = 10 * 60;
 		for(float a = 0; a < TWOPI; a += TWOPI/divider){
-			float bend1 = noise1(seed + a*2)*3;
-			float bend2 = noise1(seed + 8+a*3) * powf(i-3,1.5) * 1.5;
-			if(i < 3) 
-				bend2 = 0;
+			float bend1 = noise1(seed + a*2)*(i)*.7;
+			float bend2 = noise1(seed + 8+a*7) * powf(i-1,1.5) * 0.5;
+			// bend2 = 0;
+			// if(i == 1) 
 			// 	bend2 = noise1(seed + 8+a*10) * powf(i-1.5,2);
 				// bend2 = 0;
-			// float bend3 = noise1(-seed - a*40) * (i-2) * 0.2;
+			float bend3 = noise1(-seed - a*40) * (i-2) * 0.2;
 			// if(i < 3) 
-				// bend3 = 0;
-
-			float weight1 = (1+cos(i/4.0*M_PI))*.5;
-			float weight2 = (1-cos(i/4.0*M_PI))*.5;
-
-			x = width*.5  + SCALE * cos(a) * (i + bend1*weight1 + bend2*weight2);// * (i + bend1)+ cos(a) * bend2 - sin(a) * bend3;
-			y = height*.5 + SCALE * sin(a) * (i + bend1*weight1 + bend2*weight2);// * (i + bend1)+ sin(a) * bend2 - cos(a) * bend3;
+				bend3 = 0;
+			x = width*.5  + SCALE * cos(a) * (i + bend1 + bend2 + bend3);// * (i + bend1)+ cos(a) * bend2 - sin(a) * bend3;
+			y = height*.5 + SCALE * sin(a) * (i + bend1 + bend2 + bend3);// * (i + bend1)+ sin(a) * bend2 - cos(a) * bend3;
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}

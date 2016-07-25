@@ -1,6 +1,6 @@
 # PLOTTER
 
-make generative art directly into SVG, using __stdio.h__ `FILE`
+generative line work into SVG, using __stdio.h__ `FILE`
 
 # trace a line with a pen
 

@@ -4,7 +4,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "noise1234.c"
+#include "../common/noise.c"
 
 #define TWOPI 6.28318530718
 
@@ -12,7 +12,7 @@ int main(int argc, char **argv){
 	time_t t;
 	srand((unsigned) time(&t));
 
-	float seed = rand()%100000/1000.0;
+	float seed = rand()%1000/100.0;
 
 	int width = 800;
 	int height = 800;
@@ -40,60 +40,21 @@ int main(int argc, char **argv){
 	fprintf(file, "<g>\n");
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
 	float x, y;
-	float SCALE = 50;
+	float SCALE = 100;
 	unsigned char newPolyline = 0;
-
-	float pMag = 0.6;
-	float pStep1 = 10;
-	float pStep2 = 20;
-	float pStep3 = 30;
-	float pStep4 = 50;
-
-	for(int i = 1; i < 8; i++){
-		float divider = 10 * 60;
-
-		for(float a = 0; a <= TWOPI; a += TWOPI/divider){
-			float curve1 = pMag * pnoise1(seed    + a/TWOPI * pStep1, pStep1);
-			float curve2 = pMag * pnoise1(seed+98 + a/TWOPI * pStep2, pStep2);
-			float curve3 = pMag * pnoise1(seed+400+ a/TWOPI * pStep3, pStep3);
-			float curve4 = pMag * pnoise1(seed+42 + a/TWOPI * pStep4, pStep4);
-
-			if(i == 1){
-				curve1 += .2;
-				curve2 = 0;
-				curve3 = 0;
-				curve4 = 0;
-			}
-			else if (i == 2){
-				curve1 += .4;
-				curve3 = 0;
-				curve4 = 0;
-			}
-			else if(i == 3){
-				curve1 -= .4;
-				curve4 = 0;
-			}
-			else if(i == 4){
-				curve1 -= 1.2;
-				curve4 = .2;
-			}
-			else if(i == 5){
-				curve1 -= 1.7;
-				curve4 *= .4;
-			}
-			else if(i == 6){
-				curve1 -= 2.4;
-				curve4 *= .7;
-			}
-			else if(i == 7){
-				curve3 *= 3.0;
-				curve1 -= 2.4;
-				curve4 *= 3.0;
-			}
-
-			x = width*.5  + SCALE * cosf(a) * (i + curve1 + curve2 + curve3 + curve4);
-			y = height*.5 + SCALE * sinf(a) * (i + curve1 + curve2 + curve3 + curve4);
-
+	for(int i = 1; i < 4; i++){
+		float divider = 5 * 60;
+		for(float a = 0; a < TWOPI; a += TWOPI/divider){
+			float bend1 = noise1(seed + a*3)*(i)*.7;
+			float bend2 = noise1(seed + 8+a*10) * powf(i-2,2);
+			if(i == 1) 
+				bend2 = noise1(seed + 8+a*10) * powf(i-1.5,2);
+				// bend2 = 0;
+			float bend3 = noise1(-seed - a*40) * (i-4);
+			// if(i < 4) 
+				bend3 = 0;
+			x = width*.5  + SCALE * cos(a) * (i + bend1 + bend2);// * (i + bend1)+ cos(a) * bend2 - sin(a) * bend3;
+			y = height*.5 + SCALE * sin(a) * (i + bend1 + bend2);// * (i + bend1)+ sin(a) * bend2 - cos(a) * bend3;
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
@@ -102,7 +63,5 @@ int main(int argc, char **argv){
 	fprintf(file, "</g>\n");
 	fprintf(file, "</svg>");
 	fclose(file);
-
-	printf("%f\n", seed);
 	return 0;
 }
