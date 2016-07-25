@@ -48,9 +48,11 @@ int main(int argc, char **argv){
 
 		for(float j = 0; j < height; j++){
 
+			float freq = j*.05 + (2.0 - 0.5 * cos(j/(float)height*M_PI*2) );
+
 			float xShift = 0;//30 * sinf(i);
 
-			x = columnStart + waveMag*sinf(j*.05) * posNeg((int)floor(i*.5)%2);
+			x = columnStart + waveMag*sinf( freq ) * posNeg((int)floor(i*.5)%2);
 			y = j;
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
