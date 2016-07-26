@@ -8,47 +8,38 @@
 
 #define TWOPI 6.28318530718
 
+// output
+char filename[128] = "005-mountain.svg\0";
+char path[128] = "out/\0";
+
+// document
+int width = 800;
+int height = 800;
+
 int main(int argc, char **argv){
 	time_t t;
 	srand((unsigned) time(&t));
-
 	float seed = rand()%1000/100.0;
 
-	int width = 800;
-	int height = 800;
-
-	char path[128];
-	path[0] = '\0';
-	// strcat(path, directory);
-	// strcat(path, filename);
-	strcat(path, "homemade.svg");
+	strcat(path, filename);
 	FILE *file = fopen(path, "w");
+	// HEADER
 	fprintf(file, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-	fprintf(file, "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ");
-	fprintf(file, "x=\"0px\" y=\"0px\" width=\"");
-	fprintf(file, "%d",width);
-	fprintf(file, "px\" height=\"");
-	fprintf(file, "%d",height);
-	fprintf(file, "px\" viewBox=\"0 0 ");
-	fprintf(file, "%d ",width);
-	fprintf(file, "%d",height);
-	fprintf(file, "\" xml:space=\"preserve\">\n");
-
-	// int fputc( int c, FILE *file );
-	// char x[10]="ABCDEFGHIJ";
-	// fwrite(x, sizeof(x[0]), sizeof(x)/sizeof(x[0]), file);
+	fprintf(file, "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" ");
+	fprintf(file, "x=\"0px\" y=\"0px\" width=\"%dpx\" height=\"%dpx\" ", width, height);
+	fprintf(file, "viewBox=\"0 0 %d %d\">\n", width, height);
+	// BODY
 	fprintf(file, "<g>\n");
-	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
-	float x, y;
-	float SCALE = 20;
+	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open polyline
+
+	float SCALE = 12;
 	float ENDCAP = .2;
-	unsigned char newPolyline = 0;
 	int count = 0;
-	float ROUNDS = 12;//15.0;//18.0;
-	float iRad = 5;
-	for(int i = 5; i < ROUNDS; i++){
-		float divider = 10 * 60;
-		for(float a = 0; a < TWOPI; a += TWOPI/divider){
+	float ROUNDS = 15.0;//18.0;
+	float iRad = 2;
+	for(int i = 2; i < ROUNDS; i++){
+		float circleResolution = 10 * 60;
+		for(float a = 0; a < TWOPI; a += TWOPI/circleResolution){
 			float endCap = 1;
 			if(a < ENDCAP)
 				endCap = a/ENDCAP;
@@ -83,8 +74,8 @@ int main(int argc, char **argv){
 			float mW1 = (1+cos(i/ROUNDS*M_PI))*.5;
 			float mW2 = (1-cos(i/ROUNDS*M_PI))*.5;
 
-			x = width*.5  + SCALE * cos(a) * (iRad + endCap*(masterShape * mW1 + masterShape2 * mW2 + shape2*weight2 + shape3*weight3 + shape4*weight4 ) );
-			y = height*.5 + SCALE * sin(a) * (iRad + endCap*(masterShape * mW1 + masterShape2 * mW2 + shape2*weight2 + shape3*weight3 + shape4*weight4 ) );
+			float x = width*.5  + SCALE * cos(a) * (iRad + endCap*(masterShape * mW1 + masterShape2 * mW2 + shape2*weight2 + shape3*weight3 + shape4*weight4 ) );
+			float y = height*.5 + SCALE * sin(a) * (iRad + endCap*(masterShape * mW1 + masterShape2 * mW2 + shape2*weight2 + shape3*weight3 + shape4*weight4 ) );
 			//  + a/TWOPI 
 
 
@@ -95,17 +86,17 @@ int main(int argc, char **argv){
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 		count++;
-		float rinc = 6*noise1(seed+5 + i*1)+2;
+		float rinc = 4*noise1(seed+5 + i*1)+1.5;
 		iRad+=rinc;
 		if(!(count%2)){
 			i++;
 			iRad-=rinc;
 			// iRad += powf( (arc4random()%100/100.0)*2 + .8, 2);
-			iRad += (1+noise1(seed+14 + i*.3)*12 ) +3;
+			iRad += (1+noise1(seed+14 + i*.3)*8 ) +2;
 		}
 		// printf("%f\n", noise1(seed+14+i*.5));
 	}
-	fprintf(file, "\"/>\n"); // closing quote
+	fprintf(file, "\"/>\n"); // closing polyline
 
 	fprintf(file, "</g>\n");
 	fprintf(file, "</svg>");
