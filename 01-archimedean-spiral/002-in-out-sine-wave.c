@@ -52,7 +52,7 @@ int main(int argc, char **argv){
 		}
 	}
 
-	// OPTIONAL: pick up the pen when it gets to the middle
+	// // OPTIONAL: pick up the pen when it gets to the middle
 	// fprintf(file, "\"/>\n"); // closing quote
 	// fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
 	

@@ -1,10 +1,10 @@
-# PLOTTER
+# Plotter
 
-generative line work into SVG, using __stdio.h__ `FILE`
+generate polyline coordinates directly into an SVG, using __stdio.h__ `FILE`
 
-# trace a line with a pen
+# draw the line like a pen would
 
-* begin a polyline `fprintf(file, "<polyline points=\"");`
-* fill it with a sequence of (x,y) pairs. close the polyline
+* begin polyline `fprintf(file, "<polyline points=\"");`
+* fill it with a sequence of (x,y) pairs. close the polyline.
 
 ![example](https://cdn.rawgit.com/robbykraft/SVG/master/00-randomwalker/out/random_walker.svg)
