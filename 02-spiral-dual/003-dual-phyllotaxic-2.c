@@ -9,7 +9,7 @@
 #define TWOPI 6.28318530718
 
 // output
-char filename[128] = "004-phyllotaxic-join.svg\0";
+char filename[128] = "003-dual-phyllotaxic-2.svg\0";
 char path[128] = "out/\0";
 
 // document
@@ -19,6 +19,11 @@ int height = 800;
 // shape
 int REVOLUTIONS = 8;
 float SPACING = 7.0f;
+float wobbleFreq = 13.0;
+float wobbleMag = 1;
+// wobbleFreq = 7.0;
+// wobbleMag = 0.33;
+float circleResolution = 10 * 60;
 
 int main(int argc, char **argv){
 	time_t t;
@@ -36,14 +41,8 @@ int main(int argc, char **argv){
 	fprintf(file, "<g>\n");
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open polyline
 
-	float divider = 10 * 60;
-	float wobbleFreq = 13.0;
-	float wobbleMag = 1;
-	// wobbleFreq = 7.0;
-	// wobbleMag = 0.33;
-
 	for(int i = REVOLUTIONS-1; i >= 0; i--){
-		for(float a = TWOPI; a >= 0; a -= TWOPI/divider){
+		for(float a = TWOPI; a >= 0; a -= TWOPI/circleResolution){
 			float revolution = 2*(i+a/TWOPI);
 			float SCALE = 1.5 * revolution;
 			float x = width*.5  + cos(a) * SCALE * (revolution + sin(a*wobbleFreq)*wobbleMag );
@@ -57,7 +56,7 @@ int main(int argc, char **argv){
 	// fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open polyline
 
 	for(int i = 0; i < REVOLUTIONS; i++){
-		for(float a = 0; a < TWOPI; a += TWOPI/divider){
+		for(float a = 0; a < TWOPI; a += TWOPI/circleResolution){
 			float revolution = 2*(i+a/TWOPI);
 			float SCALE = 1.5 * revolution;
 			float x = width*.5  + cos(a-TWOPI*.5) * SCALE * (revolution + sin(a*wobbleFreq)*wobbleMag );

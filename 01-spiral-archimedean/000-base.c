@@ -15,8 +15,9 @@ int width = 800;
 int height = 800;
 
 // shape
-int REVOLUTIONS = 50;
-float SPACING = 7.0f;
+int REVOLUTIONS = 24;
+int START_RADIUS = 3;
+float SPACING = 15.0f;
 
 int main(int argc, char **argv){
 	time_t t;
@@ -35,7 +36,7 @@ int main(int argc, char **argv){
 
 	float x, y;
 	for(int i = START_RADIUS; i < REVOLUTIONS; i++){
-		float circleResolution = i * 10;  // how many points in one full circle
+		float circleResolution = i * 20;  // how many points in one full circle
 		for(float a = 0; a < TWOPI; a += TWOPI/circleResolution){
 			
 			float revolution = a/TWOPI;  // 0-1, progress of one revolution
