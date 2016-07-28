@@ -1,9 +1,9 @@
 # Plotter
 
-generate polyline coordinates directly into an SVG, using __stdio.h__ `FILE`
+generate polyline coordinates directly into an SVG, using `<stdio>` __FILE__
 
 * begin polyline `fprintf(file, "<polyline points=\"");`
-* fill it with a sequence of (x,y) pairs. close the polyline.
+* fill it with a sequence of `x,y` pairs. close the polyline.
 
 # mind the sequential order of the geometry
 
