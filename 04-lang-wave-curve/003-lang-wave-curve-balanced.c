@@ -6,49 +6,38 @@
 
 #define TWOPI 6.28318530718
 
+// output
+char filename[128] = "003-wave.svg\0";
+char path[128] = "out/\0";
+
+int width = 800;
+int height = 800;
+
+float SCALE = 26;
+float ENDCAP = .4;
+float ROUNDS = 11;//15.0;//18.0;
+
+float divider = 5 * 60;
+
+float wobbleFreq = 23.0;
+float wobbleMag = 0.02;
+
+float nudgeScale = 0.0333;
+
 int main(int argc, char **argv){
 	time_t t;
 	srand((unsigned) time(&t));
 
-	float seed = rand()%1000/100.0;
-
-	int width = 800;
-	int height = 800;
-
-	char path[128];
-	path[0] = '\0';
-	// strcat(path, directory);
-	// strcat(path, filename);
-	strcat(path, "homemade.svg");
+	strcat(path, filename);
 	FILE *file = fopen(path, "w");
+	// HEADER
 	fprintf(file, "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
-	fprintf(file, "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" ");
-	fprintf(file, "x=\"0px\" y=\"0px\" width=\"");
-	fprintf(file, "%d",width);
-	fprintf(file, "px\" height=\"");
-	fprintf(file, "%d",height);
-	fprintf(file, "px\" viewBox=\"0 0 ");
-	fprintf(file, "%d ",width);
-	fprintf(file, "%d",height);
-	fprintf(file, "\" xml:space=\"preserve\">\n");
-
-	// int fputc( int c, FILE *file );
-	// char x[10]="ABCDEFGHIJ";
-	// fwrite(x, sizeof(x[0]), sizeof(x)/sizeof(x[0]), file);
+	fprintf(file, "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" ");
+	fprintf(file, "x=\"0px\" y=\"0px\" width=\"%dpx\" height=\"%dpx\" ", width, height);
+	fprintf(file, "viewBox=\"0 0 %d %d\">\n", width, height);
+	// BODY
 	fprintf(file, "<g>\n");
-	fprintf(file, "<polyline fill=\"none\" stroke=\"#FF0000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
-
-	float x, y;
-	float SCALE = 26;
-	float ENDCAP = .4;
-	float ROUNDS = 11;//15.0;//18.0;
-	
-	float divider = 5 * 60;
-
-	float wobbleFreq = 23.0;
-	float wobbleMag = 0.02;
-
-	float nudgeScale = 0.0333;
+	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open polyline
 
 	for(int i = 0; i < ROUNDS; i+=2){
 		for(float a = 0; a < TWOPI; a += TWOPI/divider){
@@ -66,8 +55,8 @@ int main(int argc, char **argv){
 				nudgeScale = 0.033;
 			float wobbleIncr = (i + 2*a/TWOPI);
 			// wobbleIncr = 1.0;
-			x = width*.5  + SCALE * cos(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE*.33 * one;
-			y = height*.5 + SCALE * sin(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+			float x = width*.5  + SCALE * cos(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE*.33 * one;
+			float y = height*.5 + SCALE * sin(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
@@ -92,8 +81,8 @@ int main(int argc, char **argv){
 				nudgeScale = 0.033;
 			float wobbleIncr = (i + 2*a/TWOPI);
 			// wobbleIncr = 1.0;
-			x = width*.5  + SCALE * cos(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE*.33 * one;
-			y = height*.5 + SCALE * sin(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+			float x = width*.5  + SCALE * cos(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE*.33 * one;
+			float y = height*.5 + SCALE * sin(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
@@ -111,8 +100,8 @@ int main(int argc, char **argv){
 				one = (a/TWOPI);
 			float wobbleIncr = (i + 2*a/TWOPI);
 			// wobbleIncr = 1.0;
-			x = width*.5  + SCALE * cos(a) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE*.33 * one;
-			y = height*.5 + SCALE * sin(a) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+			float x = width*.5  + SCALE * cos(a) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE*.33 * one;
+			float y = height*.5 + SCALE * sin(a) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
@@ -129,8 +118,8 @@ int main(int argc, char **argv){
 			// one = 0;
 			float wobbleIncr = (i + 2*a/TWOPI);
 			// wobbleIncr = 1.0;
-			x = width*.5  + SCALE * cos(a-TWOPI*.5) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE*.33 * one;
-			y = height*.5 + SCALE * sin(a-TWOPI*.5) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+			float x = width*.5  + SCALE * cos(a-TWOPI*.5) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE*.33 * one;
+			float y = height*.5 + SCALE * sin(a-TWOPI*.5) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
@@ -152,8 +141,8 @@ int main(int argc, char **argv){
 		for(float a = 0; a <= TWOPI+.0001; a += TWOPI/divider){
 			float wobbleIncr = (i + 2*a/TWOPI);
 			// wobbleIncr = 1.0;
-			x = width*.5  + SCALE * cos(a) * (i + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
-			y = height*.5 + SCALE * sin(a) * (i + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+			float x = width*.5  + SCALE * cos(a) * (i + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+			float y = height*.5 + SCALE * sin(a) * (i + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 

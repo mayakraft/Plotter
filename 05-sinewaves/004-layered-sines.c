@@ -21,17 +21,17 @@ float GROUP_SPACING = 200.0;
 float GROUP_NUM_VERTICALS = 4.0;
 
 // sine curve
-float FREQUENCY = .028;
+float FREQUENCY = .018;
 float AMPLITUDE = 10;
 
-float phase0 = 0.2;
+float phase0 = TWOPI*0.25 / 6.0;  // this needs to be a relation of PI / height
 
-float period1 = 0.02;
-float period2 = 0.005;
-float period3 = 0.015;
-float period4 = 0.0175;
+float freq1 = 0.003;
+float freq2 = 0.005;
+float freq3 = 0.015;
+float freq4 = 0.0175;
 
-float magnitude1 = 18;
+float magnitude1 = 12;
 float magnitude2 = 30;
 float magnitude3 = 15;
 float magnitude4 = 15;
@@ -84,13 +84,18 @@ int main(int argc, char **argv){
 			for(float h = 0; h < height; h++){
 
 
-				float wave1 = magnitude1 * sinf(h*period1 + phase);
-				float wave2 = magnitude2 * sinf(h*period2 + phase);
-				float wave3 = magnitude3 * sinf(h*period3 + phase);
-				float wave4 = magnitude4 * sinf(h*period4 + phase);
+				float wave1 = magnitude1 * sinf(h * freq1 + phase);
+				float wave2 = magnitude2 * sinf(h * freq2 + phase);
+				float wave3 = magnitude3 * sinf(h * freq3 + phase);
+				float wave4 = magnitude4 * sinf(h * freq4 + phase);
+
+				// wave1 = 0;
+				wave2 = 0;
+				wave3 = 0;
+				wave4 = 0;
 
 				float sine = sinf(h*FREQUENCY) * AMPLITUDE;
-				float x = xGroup + xInternalSpacing + (sine + wave1) * direction * affine;
+				float x = xGroup + xInternalSpacing + (sine + wave1 + wave2 + wave3 + wave4) * direction * affine;
 				float y = h;
 
 				fprintf(file, "%.2f,%.2f ", x, y);
