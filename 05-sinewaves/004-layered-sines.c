@@ -83,18 +83,20 @@ int main(int argc, char **argv){
 			fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
 			for(float h = 0; h < height; h++){
 
+				float sine = sinf(h*FREQUENCY) * AMPLITUDE;
 
 				float wave1 = magnitude1 * sinf(h * freq1 + phase);
 				float wave2 = magnitude2 * sinf(h * freq2 + phase);
 				float wave3 = magnitude3 * sinf(h * freq3 + phase);
 				float wave4 = magnitude4 * sinf(h * freq4 + phase);
 
+				sine = 0;
+
 				// wave1 = 0;
 				wave2 = 0;
 				wave3 = 0;
 				wave4 = 0;
 
-				float sine = sinf(h*FREQUENCY) * AMPLITUDE;
 				float x = xGroup + xInternalSpacing + (sine + wave1 + wave2 + wave3 + wave4) * direction * affine;
 				float y = h;
 
