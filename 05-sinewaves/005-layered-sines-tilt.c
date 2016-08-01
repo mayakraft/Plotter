@@ -7,35 +7,31 @@
 #define TWOPI 6.28318530718
 
 // output
-char filename[128] = "004-layered-sines.svg\0";
+char filename[128] = "005-layered-sines.svg\0";
 char path[128] = "out/\0";
 // path[0] = '\0';
 
 // document
 int width = 1200;
-int height = 900;
+int height = 1100;
 
 // groups
-float NUM_GROUPS = 6;
-float GROUP_SPACING = 200.0;
+float NUM_GROUPS = 5;
+float GROUP_SPACING = 240.0;
 float GROUP_NUM_VERTICALS = 4.0;
 
 // sine curve
-float FREQUENCY = .018;
-float AMPLITUDE = 10;
+float frequency1 = 0.005;
+float frequency2 = 0.003;
+float frequency3 = 0.015;
+float frequency4 = 0.0175;
 
-float phase0 = TWOPI*0.25 / 6.0;  // this needs to be a relation of PI / height
+float amplitude1 = 8;
+float amplitude2 = 8;
+float amplitude3 = 15;
+float amplitude4 = 15;
 
-float freq1 = 0.003;
-float freq2 = 0.005;
-float freq3 = 0.015;
-float freq4 = 0.0175;
-
-float magnitude1 = 12;
-float magnitude2 = 30;
-float magnitude3 = 15;
-float magnitude4 = 15;
-
+float phase0 = TWOPI*0.25 / 5.0;
 
 int mod2PosNeg(int iterator){
 	if(iterator%2 == 0){ return -1; }
@@ -65,10 +61,10 @@ int main(int argc, char **argv){
 
 			// spacing
 			float percentOfGroup = (j / GROUP_NUM_VERTICALS);
-			if(j == 0) percentOfGroup = .175;
-			if(j == 1) percentOfGroup = .3;
-			if(j == 2) percentOfGroup = .625;
-			if(j == 3) percentOfGroup = .75;
+			// if(j == 0) percentOfGroup = .175;
+			// if(j == 1) percentOfGroup = .3;
+			// if(j == 2) percentOfGroup = .625;
+			// if(j == 3) percentOfGroup = .75;
 			float xInternalSpacing = percentOfGroup * GROUP_SPACING;
 
 			// affine scale
@@ -80,29 +76,27 @@ int main(int argc, char **argv){
 
             float phase = (i*4+j)*phase0;
 
-			fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
+			fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open polyline
 			for(float h = 0; h < height; h++){
 
-				float sine = sinf(h*FREQUENCY) * AMPLITUDE;
+				float wave1 = amplitude1 * sinf(h * frequency1 + phase);
+				float wave2 = amplitude2 * sinf(h * frequency2 + phase);
+				float wave3 = amplitude3 * sinf(h * frequency3 + phase);
+				float wave4 = amplitude4 * sinf(h * frequency4 + phase);
 
-				float wave1 = magnitude1 * sinf(h * freq1 + phase);
-				float wave2 = magnitude2 * sinf(h * freq2 + phase);
-				float wave3 = magnitude3 * sinf(h * freq3 + phase);
-				float wave4 = magnitude4 * sinf(h * freq4 + phase);
-
-				sine = 0;
+				float tilt = h*.1;
 
 				// wave1 = 0;
-				wave2 = 0;
-				wave3 = 0;
+				// wave2 = 0;
+				// wave3 = 0;
 				wave4 = 0;
 
-				float x = xGroup + xInternalSpacing + (sine + wave1 + wave2 + wave3 + wave4) * direction * affine;
+				float x = xGroup + xInternalSpacing + (wave1 + wave2 + wave3 + wave4) * direction * affine + tilt;
 				float y = h;
 
 				fprintf(file, "%.2f,%.2f ", x, y);
 			}
-			fprintf(file, "\"/>\n"); // closing quote
+			fprintf(file, "\"/>\n"); // closing polyline
 		}
 	}
 
