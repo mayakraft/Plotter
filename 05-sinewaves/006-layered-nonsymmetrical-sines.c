@@ -16,7 +16,7 @@ int width = 1600;
 int height = 1200;
 
 // groups
-float NUM_GROUPS = 5;
+float NUM_GROUPS = 7; // 5; // 16.08.06
 float GROUP_SPACING = 240.0;
 float GROUP_NUM_VERTICALS = 4.0;
 
