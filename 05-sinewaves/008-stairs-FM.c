@@ -11,22 +11,21 @@ char filename[128] = "008-stairs.svg\0";
 char path[128] = "out/\0";
 
 // document
-int width = 1200;
-int height = 700;
+int width = 600;
+int height = 800;
 
 // groups
-float NUM_GROUPS = 6;
-float GROUP_SPACING = 200.0;
-float GROUP_NUM_VERTICALS = 4.0;
+float NUM_GROUPS = 2;
+float GROUP_SPACING = 300.0;
+float GROUP_NUM_VERTICALS = 6.0;
 
 // sine curve
 float FREQUENCY = .05;
 float AMPLITUDE = 12;
 
-float LARGE_FREQUENCY = .005;
-float LARGE_AMP = .1;
+float LARGE_FREQUENCY = .015;
 
-float LARGE_STRETCH = .8;
+float LARGE_STRETCH = .5;
 
 int MASTER_INDEX = 0;
 
@@ -71,21 +70,27 @@ int main(int argc, char **argv){
 				if(h > height*(.5-LARGE_STRETCH*.5) && h < height*(.5+LARGE_STRETCH*.5) ){
 					float start = height*(.5-LARGE_STRETCH*.5);
 					float phase = (h-start)/(height*LARGE_STRETCH); // 0 to 1
-					freq_increase = -cos(phase*TWOPI)*.5 + .5;
-					freq_increase = powf(freq_increase, 2);
+					freq_increase = powf(cos(phase*TWOPI*.5 + TWOPI*.25), 2);
 				}
-				PHASE_OFFSET += freq_increase * LARGE_AMP;
-				printf("%f\n", freq_increase);
+				PHASE_OFFSET += freq_increase * LARGE_FREQUENCY;
 
 				float sine = sinf(h*FREQUENCY + PHASE_OFFSET) * AMPLITUDE;
 				float x;
 
-				if(MASTER_INDEX%6 == 0 || MASTER_INDEX % 6 == 3)
-					x = xGroup + xInternalSpacing + sine * direction;
+				float reverse = 1;
+				if(i%2 == 1)
+					reverse = -1;
+
+				if(MASTER_INDEX%6 == 0 || MASTER_INDEX % 6 == 3){
+					x = xGroup + xInternalSpacing + 0 + AMPLITUDE;
+					fprintf(file, "%.2f,%.2f ", x, 0.0);
+					fprintf(file, "%.2f,%.2f ", x, (float)height);
+					break;
+				}
 				else if(MASTER_INDEX%6 == 1 || MASTER_INDEX % 6 == 4)
-					x = xGroup + xInternalSpacing - sine * direction;
+					x = xGroup + xInternalSpacing + sine * direction * reverse;
 				else if(MASTER_INDEX%6 == 2 || MASTER_INDEX % 6 == 5)
-					x = xGroup + xInternalSpacing + 0;
+					x = xGroup + xInternalSpacing - sine * direction * reverse;
 				float y = h;
 
 				fprintf(file, "%.2f,%.2f ", x, y);
