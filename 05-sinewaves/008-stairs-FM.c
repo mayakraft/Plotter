@@ -55,6 +55,8 @@ int main(int argc, char **argv){
 		for(int j = 0; j < GROUP_NUM_VERTICALS; j++){
 			// pattern: L L R R L L ...
 			int direction = 1;//mod2PosNeg(j*.5);   // -1 or +1
+			if(j > GROUP_NUM_VERTICALS * 0.5)
+				direction = -1;
 
 			// spacing
 			float percentOfGroup = (j / GROUP_NUM_VERTICALS);
@@ -77,10 +79,6 @@ int main(int argc, char **argv){
 				float sine = sinf(h*FREQUENCY + PHASE_OFFSET) * AMPLITUDE;
 				float x;
 
-				float reverse = 1;
-				if(i%2 == 1)
-					reverse = -1;
-
 				if(MASTER_INDEX%6 == 0 || MASTER_INDEX % 6 == 3){
 					x = xGroup + xInternalSpacing + 0 + AMPLITUDE;
 					fprintf(file, "%.2f,%.2f ", x, 0.0);
@@ -88,9 +86,9 @@ int main(int argc, char **argv){
 					break;
 				}
 				else if(MASTER_INDEX%6 == 1 || MASTER_INDEX % 6 == 4)
-					x = xGroup + xInternalSpacing + sine * direction * reverse;
+					x = xGroup + xInternalSpacing + sine * direction;
 				else if(MASTER_INDEX%6 == 2 || MASTER_INDEX % 6 == 5)
-					x = xGroup + xInternalSpacing - sine * direction * reverse;
+					x = xGroup + xInternalSpacing - sine * direction;
 				float y = h;
 
 				fprintf(file, "%.2f,%.2f ", x, y);

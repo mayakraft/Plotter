@@ -15,9 +15,9 @@ int width = 1200;
 int height = 700;
 
 // groups
-float NUM_GROUPS = 6;
-float GROUP_SPACING = 200.0;
-float GROUP_NUM_VERTICALS = 4.0;
+float NUM_GROUPS = 4;
+float GROUP_SPACING = 300.0;
+float GROUP_NUM_VERTICALS = 6.0;
 
 // sine curve
 float FREQUENCY = .05;
@@ -46,19 +46,36 @@ int main(int argc, char **argv){
 
 		// 4 sine waves in every group
 		for(int j = 0; j < GROUP_NUM_VERTICALS; j++){
+
+			fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
+
 			// pattern: L L R R L L ...
 			int direction = 1;//mod2PosNeg(j*.5);   // -1 or +1
+			if(j%6 == 2 || j % 6 == 5)
+				direction = -1;
+
+			if(j > GROUP_NUM_VERTICALS * 0.5)
+				direction *= -1;
+
 
 			// spacing
 			float percentOfGroup = (j / GROUP_NUM_VERTICALS);
 			float xInternalSpacing = percentOfGroup * GROUP_SPACING;
 
-			fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
+
 			for(float h = 0; h < height; h++){
 
 				float sine = sinf(h*FREQUENCY) * AMPLITUDE;
 				float x = xGroup + xInternalSpacing + sine * direction;
 				float y = h;
+
+				// STRAIGHT LINE, no curve
+				if(j%6 == 0 || j%6 == 3){
+					x = xGroup + xInternalSpacing + AMPLITUDE;
+					fprintf(file, "%.2f,%.2f ", x, 0.0);
+					fprintf(file, "%.2f,%.2f ", x, (float)height);
+					break;
+				}
 
 				fprintf(file, "%.2f,%.2f ", x, y);
 			}
