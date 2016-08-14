@@ -80,6 +80,16 @@ int main(int argc, char **argv){
 
 			float x = width*.5  + SCALE * cos(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE * pathGap * one;
 			float y = height*.5 + SCALE * sin(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI + sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+
+
+			// the end of the line, ease these two lines together
+			if(i >= ROUNDS ){
+				float otherX = width*.5  + SCALE * cos(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE * pathGap * one;
+				float otherY = height*.5 + SCALE * sin(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );	
+				x = (x+otherX) * .5;
+				y = (y+otherY) * .5;
+			}
+
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
