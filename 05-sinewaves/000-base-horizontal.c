@@ -7,21 +7,23 @@
 #define TWOPI 6.28318530718
 
 // output
-char filename[128] = "000-base.svg\0";
+char filename[128] = "000-base-horizontal.svg\0";
 char path[128] = "out/\0";
 
 // document
 int width = 1200;
 int height = 700;
+float MARGIN = 30;
 
 // groups
-float NUM_GROUPS = 6;
-float GROUP_SPACING = 200.0;
-float GROUP_NUM_VERTICALS = 4.0;
+float NUM_GROUPS = 4;
+float GROUP_SPACING = 170.0;
+float GROUP_NUM_HORIZONTALS = 4.0;
 
 // sine curve
 float FREQUENCY = .03;
 float AMPLITUDE = 10;
+
 
 int mod2PosNeg(int iterator){
 	if(iterator%2 == 0){ return -1; }
@@ -42,23 +44,23 @@ int main(int argc, char **argv){
 	fprintf(file, "\" xml:space=\"preserve\">\n<g>\n");
 	
 	for(int i = 0; i < NUM_GROUPS; i++){
-		float xGroup = GROUP_SPACING * i;  // the major X axis of each group
+		float yGroup = GROUP_SPACING * i;  // the major X axis of each group
 
 		// 4 sine waves in every group
-		for(int j = 0; j < GROUP_NUM_VERTICALS; j++){
+		for(int j = 0; j < GROUP_NUM_HORIZONTALS; j++){
 			// pattern: L L R R L L ...
 			int direction = mod2PosNeg(j*.5);   // -1 or +1
 
 			// spacing
-			float percentOfGroup = (j / GROUP_NUM_VERTICALS);
-			float xInternalSpacing = percentOfGroup * GROUP_SPACING;
+			float percentOfGroup = (j / GROUP_NUM_HORIZONTALS);
+			float yInternalSpacing = percentOfGroup * GROUP_SPACING;
 
 			fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" points=\"");  // hanging open quote
-			for(float h = 0; h < height; h++){
+			for(float w = 0; w < width; w++){
 
-				float sine = sinf(h*FREQUENCY) * AMPLITUDE;
-				float x = xGroup + xInternalSpacing + sine * direction;
-				float y = h;
+				float sine = sinf(w*FREQUENCY) * AMPLITUDE;
+				float x = w;
+				float y = ((MARGIN)) + yGroup + yInternalSpacing + sine * direction;
 
 				fprintf(file, "%.2f,%.2f ", x, y);
 			}
