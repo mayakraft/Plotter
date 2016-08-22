@@ -11,11 +11,11 @@ char filename[128] = "008-stairs.svg\0";
 char path[128] = "out/\0";
 
 // document
-int width = 600;
-int height = 800;
+int width = 900;
+int height = 1070;
 
 // groups
-float NUM_GROUPS = 2;
+float NUM_GROUPS = 3;
 float GROUP_SPACING = 300.0;
 float GROUP_NUM_VERTICALS = 6.0;
 
@@ -23,7 +23,7 @@ float GROUP_NUM_VERTICALS = 6.0;
 float FREQUENCY = .05;
 float AMPLITUDE = 12;
 
-float LARGE_FREQUENCY = .015;
+float LARGE_FREQUENCY = .035;
 
 float LARGE_STRETCH = .5;
 

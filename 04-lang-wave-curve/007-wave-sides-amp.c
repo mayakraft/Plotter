@@ -10,8 +10,8 @@
 char filename[128] = "007-wave.svg\0";
 char path[128] = "out/\0";
 
-int width = 900;
-int height = 900;
+int width = 1000;
+int height = 1000;
 
 float SCALE = 26;
 float ENDCAP = .4;
@@ -19,14 +19,14 @@ float ROUNDS = 11;//15.0;//18.0;
 
 float divider = 10 * 60;
 
-float wobbleFreq = 23.0;
+float wobbleFreq = 19.0;
 float wobbleMag = 0.033;
 
 float nudgeScale = 0.0333;
 
 float pathGap = 0.33;
 
-float SIDE_AMP = 0.017;
+float SIDE_AMP = 0.005;//0.017;
 
 int main(int argc, char **argv){
 	time_t t;
@@ -45,7 +45,7 @@ int main(int argc, char **argv){
 
 	for(int i = 0; i <= ROUNDS+1; i+=2){
 		for(float a = 0; a < TWOPI; a += TWOPI/divider){
-			if(i >= ROUNDS && a > TWOPI*.25)
+			if(i >= ROUNDS && a > TWOPI*.33)
 				break;
 			float one = 1.0;
 			if(i == 0)
@@ -83,11 +83,16 @@ int main(int argc, char **argv){
 
 
 			// the end of the line, ease these two lines together
-			if(i >= ROUNDS ){
-				float otherX = width*.5  + SCALE * cos(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE * pathGap * one;
-				float otherY = height*.5 + SCALE * sin(a - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );	
-				// x = (x+otherX) * .5;
-				// y = (y+otherY) * .5;
+			if(i >= ROUNDS && a > TWOPI*.16){
+				float a2 = a + TWOPI*.5;
+				float x2 = width*.5  + SCALE * cos(a2-TWOPI*.5 - nudgeScale*sin(a2)) * ((i-0.5) + 2*a/TWOPI - sin(a2*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE * pathGap * one;
+				float y2 = height*.5 + SCALE * sin(a2-TWOPI*.5 - nudgeScale*sin(a2)) * ((i-0.5) + 2*a/TWOPI - sin(a2*wobbleFreq)*wobbleMag*wobbleIncr );
+				
+				float inc = (a - TWOPI*.16) / ( TWOPI*.33 - TWOPI*.16 );
+				x = x * (1 - inc) + x2 * inc;
+				y = y * (1 - inc) + y2 * inc;
+				// x = x2;
+				// y = y2;
 			}
 
 			fprintf(file, "%.2f,%.2f ", x, y);
@@ -99,7 +104,7 @@ int main(int argc, char **argv){
 
 	for(int i = 0; i < ROUNDS; i+=2){
 		for(float a = 0; a < TWOPI; a += TWOPI/divider){
-			if(i == ROUNDS-1 && a > TWOPI*.75)
+			if(i == ROUNDS-1 && a > TWOPI*.83)
 				break;
 
 			float one = 1.0;
@@ -136,6 +141,18 @@ int main(int argc, char **argv){
 
 			float x = width*.5  + SCALE * cos(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr  ) + SCALE * pathGap * one;
 			float y = height*.5 + SCALE * sin(a-TWOPI*.5 - nudgeScale*sin(a)) * (i + 2*a/TWOPI - sin(a*wobbleFreq)*wobbleMag*wobbleIncr );
+
+			if(i >= ROUNDS-1 && a > TWOPI*.66){
+				float a2 = a - TWOPI*.5;
+				float x2 = width*.5  + SCALE * cos(a2 - nudgeScale*sin(a2)) * ((i+0.5) + 2*a/TWOPI + sin(a2*wobbleFreq)*wobbleMag*wobbleIncr ) - SCALE * pathGap * one;
+				float y2 = height*.5 + SCALE * sin(a2 - nudgeScale*sin(a2)) * ((i+0.5) + 2*a/TWOPI + sin(a2*wobbleFreq)*wobbleMag*wobbleIncr );
+
+				float inc = (a - TWOPI*.66) / ( TWOPI*.83 - TWOPI*.66 );
+				x = x * (1 - inc) + x2 * inc; 
+				y = y * (1 - inc) + y2 * inc;
+				// x = x2;
+				// y = y2;
+			}
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
 	}
@@ -176,14 +193,14 @@ int main(int argc, char **argv){
 
 
 
-	wobbleMag = 0.025;
+	wobbleMag = 0.022;
 
 
 	fprintf(file, "\"/>\n"); // closing quote
 	fprintf(file, "<polyline fill=\"none\" stroke=\"#000000\" stroke-miterlimit=\"10\" points=\"");  // hanging open quote
 
 	// int i = 14;
-	float i = 15.5;
+	float i = 17;
 		for(float a = 0; a <= TWOPI+.0001; a += TWOPI/divider){
 			float wobbleIncr = (i + 2*a/TWOPI);
 			// wobbleIncr = 1.0;
