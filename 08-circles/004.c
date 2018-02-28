@@ -5,9 +5,10 @@
 #include <math.h>
 
 #define TWOPI 6.28318530718
+#define EPSILON 0.00001
 
 // output
-char filename[128] = "003.svg\0";
+char filename[128] = "004.svg\0";
 char path[128] = "out/\0";
 
 // document
@@ -20,8 +21,8 @@ int START_RADIUS = 2;
 float SPACING = 32.0f;
 
 // waves
-float wobbleFreq = 9.0;
-float wobbleMag = 0.8;
+float wobbleFreq = 7.0;
+float wobbleMag = 1.5;
 
 int main(int argc, char **argv){
 	time_t t;
@@ -40,24 +41,32 @@ int main(int argc, char **argv){
 	float x, y;
 	for(int i = START_RADIUS; i < START_RADIUS + NUM; i++){
 
-		float wobbleMagLoop = wobbleMag*(i-START_RADIUS+1);
+		float wobbleMagLoop = wobbleMag*sqrt(i-START_RADIUS+1);
 		
 		if(i%2==0){
 			fprintf(file, "<polyline fill=\"none\" stroke=\"#FF005C\" stroke-width=\"2\" stroke-miterlimit=\"10\" stroke-dasharray=\"5.9976,2.9988\" points=\"");  // hanging open polyline
 		} else{
 			fprintf(file, "<polyline fill=\"none\" stroke=\"#0000FF\" stroke-width=\"2\" stroke-miterlimit=\"10\" points=\"");  // hanging open polyline
 		}
-		float circleResolution = (i+2) * 40;  // how many points in one full circle
-		for(float a = 0; a < TWOPI; a += TWOPI/circleResolution){
+		float circleResolution = (i+2) * 80;  // how many points in one full circle
+		for(float a = 0; a <= TWOPI + EPSILON; a += TWOPI/circleResolution){
 			// growth of each ring slows exponentially
-			float shift = -powf((i-START_RADIUS),3);
+			float shift = 0;//-powf((i-START_RADIUS),3);
+			float secondLevel = sin(a*wobbleFreq*2+M_PI*0.5) * wobbleMagLoop * (i-3) * 1.8;
+			if(i < 3) secondLevel = 0;
+			float thirdLevel = sin(a*wobbleFreq*4+M_PI*0.5) * wobbleMagLoop * (i-3);
+			// if(i < 3) thirdLevel = 0;
+			thirdLevel = 0;
 			
-			float radius = SPACING * 2*i + sin(a*wobbleFreq) * wobbleMagLoop * 2*i + shift;
+			float radius = SPACING * 2*i
+			               + sin(a*wobbleFreq) * wobbleMagLoop * i
+			               + secondLevel
+			               + thirdLevel
+			               + shift;
 			x = width*.5  + cosf(a) * radius;
 			y = height*.5 + sinf(a) * radius;
 			fprintf(file, "%.2f,%.2f ", x, y);
 		}
-		fprintf(file, "%.2f,%.2f ", width*.5  + cosf(0) * SPACING*2*i, height*.5 + sinf(0) * SPACING*2*i);
 		fprintf(file, "\"/>\n"); // closing polyline
 	}
 
